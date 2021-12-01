@@ -1,14 +1,12 @@
-import Data.List.Split
-
 part1 = do 
     contents <- readFile "input/day1.txt"
-    let depts = mapToInt contents
-    print . countInc $ depts
+    let depths = mapToInt contents
+    print . countInc $ depths
 
 part2 = do
     contents <- readFile "input/day1.txt"
-    let depts = mapToInt contents
-    print . countSums $ depts
+    let depths = mapToInt contents
+    print . countSums $ depths
 
 mapToInt :: String -> [Int]
 mapToInt = map rInt . words
@@ -19,7 +17,7 @@ rInt = read
 countInc :: [Int] -> Int
 countInc [x] = 0;
 countInc (x:xs) 
-    | x <= head xs = 1 + countInc xs
+    | x < head xs = 1 + countInc xs
     | otherwise = countInc xs
 
 countSums :: [Int] -> Int

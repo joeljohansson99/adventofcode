@@ -1,5 +1,6 @@
 
-import solutions.*;
+import solutions.Day17;
+import solutions.Day;
 
 public class Main {
 	

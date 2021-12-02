@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="2020/src"/>
+	<classpathentry kind="lib" path="2019/target/scala-2.12/adventofcode_2.12-0.1.0-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="2019/target/scala-2.12/adventofcode2019_2.12-0.1.0-SNAPSHOT.jar"/>
+	<classpathentry kind="output" path="2020/bin"/>
+</classpath>

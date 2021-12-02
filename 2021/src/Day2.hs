@@ -1,27 +1,35 @@
-part1 = do 
+part1 = do
     contents <- readFile "input/day2.txt"
     let commands = wordsWhen (=='\n') contents
     let splitted = matchMap commands
-    let sum      = (calcHor splitted) * (calcDepth splitted)
-    print sum
+    print (calc splitted 0 0)
+
+part2 = do
+    contents <- readFile "input/day2.txt"
+    let commands = wordsWhen (=='\n') contents
+    let splitted = matchMap commands
+    print (calcWithAim splitted 0 0 0)
 
 matchMap :: [String] -> [(String, Int)]
 matchMap [] = []
-matchMap (x:xs) = [(head ys, read (last ys))] ++ (matchMap xs)
+matchMap (x:xs) = (head ys, read . last $ ys) : matchMap xs
     where ys = wordsWhen (==' ') x
 
-calcHor :: [(String, Int)] -> Int
-calcHor [] = 0
-calcHor (x:xs)
-    | (fst x) == "forward" = snd x + calcHor xs
-    | otherwise = calcHor xs
+calc :: [(String, Int)] -> Int -> Int -> Int
+calc [] h d = h*d
+calc (x:xs) h d
+    | fst x == "forward" = calc xs (h + snd x) d
+    | fst x == "up" = calc xs h (d - snd x)
+    | fst x == "down" = calc xs h (d + snd x)
+    | otherwise = calc xs h d
 
-calcDepth :: [(String, Int)] -> Int
-calcDepth [] = 0
-calcDepth (x:xs)
-    | (fst x) == "up" = calcDepth xs - snd x
-    | (fst x) == "down" = snd x + calcDepth xs
-    | otherwise = calcDepth xs
+calcWithAim :: [(String, Int)] -> Int -> Int -> Int -> Int
+calcWithAim [] h d a = h*d
+calcWithAim (x:xs) h d a
+    | fst x == "forward" = calcWithAim xs (h + snd x) (d + a * snd x) a
+    | fst x == "up" = calcWithAim xs h d (a - snd x)
+    | fst x == "down" = calcWithAim xs h d (a + snd x)
+    | otherwise = calcWithAim xs h d a
 
 rInt :: String -> (Int, String)
 rInt = read

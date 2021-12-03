@@ -31,9 +31,6 @@ calcWithAim (x:xs) h d a
     | fst x == "down" = calcWithAim xs h d (a + snd x)
     | otherwise = calcWithAim xs h d a
 
-rInt :: String -> (Int, String)
-rInt = read
-
 wordsWhen     :: (Char -> Bool) -> String -> [String]
 wordsWhen p s =  case dropWhile p s of
     "" -> []

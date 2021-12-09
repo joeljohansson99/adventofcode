@@ -1,4 +1,3 @@
-import Distribution.Simple.Utils (die')
 part1 :: IO ()
 part1 = do
     contents <- readFile "input/day8.txt"

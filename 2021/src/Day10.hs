@@ -1,5 +1,4 @@
-{-# OPTIONS_GHC -Wno-incomplete-patterns #-}
-import Data.List
+import Data.List ( sort )
 part1 :: IO ()
 part1 = do
     contents <- readFile "input/day10.txt"

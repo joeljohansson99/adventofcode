@@ -3,7 +3,7 @@ part1 = do
     contents <- readFile "input/day13.txt"
     let dots = map toDot $ takeWhile (\s -> head s /= 'f') $ words contents
     let folds = map (toFold . dropWhile (\ c -> c /= 'x' && c /= 'y')) (dropWhile (\ s -> head s /= 'f') $ wordsWhen (== '\n') contents)
-    print $ foldOnce (head folds) dots
+    print . length $ foldOnce (head folds) dots
 
 part2 :: IO ()
 part2 = do

@@ -1,8 +1,3 @@
-{-# OPTIONS_GHC -Wno-incomplete-patterns #-}
-import Distribution.Simple.Utils (die')
-import Data.List.Extra ( groupBy )
-import Data.Array.IArray ( accumArray, assocs )
-import Data.Function (on)
 part1 :: IO ()
 part1 = do
     contents <- readFile "input/day13.txt"
@@ -16,7 +11,7 @@ part2 = do
     let dots = map toDot $ takeWhile (\s -> head s /= 'f') $ words contents
     let folds = map (toFold . dropWhile (\ c -> c /= 'x' && c /= 'y')) (dropWhile (\ s -> head s /= 'f') $ wordsWhen (== '\n') contents)
     let codes = filterDuplicate $ folding folds dots
-    putStr $ unlines $ generateGrid $ map (\d -> ('o',snd d, fst d)) codes
+    putStr $ unlines $ generateGrid $ map (\d -> ('#',snd d, fst d)) codes
 
 setVal :: Int -> a -> [a] -> [a]
 setVal idx val lst = h ++ (val : tail t)

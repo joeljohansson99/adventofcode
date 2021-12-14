@@ -9,7 +9,7 @@ part1 = do
     let t = map (\s -> (take 2 s, last s)) $ tail $ wordsWhen (=='\n') contents
     let entries = startEntries codes (map (\(p,_) -> (p,0)) tmp)
     let charCount = map (\c -> (c,0)) $ distinct $ map snd t
-    let calculated = step2 pairs entries 10
+    let calculated = step pairs entries 10
     let counted = map snd $ increaseLetters (head code) (last code) (map (\(c,n) -> (c, n `div` 2)) (countChars calculated charCount))
     let (max,min) = (maximum counted,minimum counted)
     print $ max - min
@@ -24,7 +24,7 @@ part2 = do
     let t = map (\s -> (take 2 s, last s)) $ tail $ wordsWhen (=='\n') contents
     let entries = startEntries codes (map (\(p,_) -> (p,0)) tmp)
     let charCount = map (\c -> (c,0)) $ distinct $ map snd t
-    let calculated = step2 pairs entries 40
+    let calculated = step pairs entries 40
     let counted = map snd $ increaseLetters (head code) (last code) (map (\(c,n) -> (c, n `div` 2)) (countChars calculated charCount))
     let (max,min) = (maximum counted,minimum counted)
     print $ max - min
@@ -51,9 +51,9 @@ addCharCount c ((x,n):xs) i
 startEntries :: [String] -> [Entry] -> [Entry]
 startEntries xs es = foldl (\ es x -> addCount es x 1) es xs
 
-step2 :: [Pair] -> [Entry] -> Int -> [Entry]
-step2 _ es 0 = es
-step2 ps es n = step2 ps (decreaseOldEntries (newEntries es es ps) es) (n-1)
+step :: [Pair] -> [Entry] -> Int -> [Entry]
+step _ es 0 = es
+step ps es n = step ps (decreaseOldEntries (newEntries es es ps) es) (n-1)
 
 findTransform :: String -> [Pair] -> [String]
 findTransform s (p:ps)
@@ -70,9 +70,7 @@ newEntries ((e,n):es) ret ps
 
 decreaseOldEntries :: [Entry] -> [Entry] -> [Entry]
 decreaseOldEntries [] [] = []
-decreaseOldEntries ((e1,n1):ns) ((e2,n2):os)
-    | n2 > 0 = (e1,n1-n2) : decreaseOldEntries ns os
-    | otherwise = (e1,n1) : decreaseOldEntries ns os
+decreaseOldEntries ((e1,n1):ns) ((e2,n2):os) = (e1,n1-n2) : decreaseOldEntries ns os
 
 getCodes :: String -> [String]
 getCodes [x,y] = [[x,y]]

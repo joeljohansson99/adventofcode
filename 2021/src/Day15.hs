@@ -1,60 +1,59 @@
-import Data.List ( sort )
-import Data.Functor.Contravariant.Compat.Repl (Comparison(getComparison))
+import qualified Data.PSQueue as Q
+import qualified Data.Array as A
+import Data.Maybe ( fromJust )
+import Data.IntMap (minView)
+
 part1 :: IO ()
 part1 = do
     contents <- readFile "input/day15.txt"
-    let points = mapToPoints 1 1 (map (map (\c -> rInt [c])) $ words contents)
-    let connections = map (\p -> (p, getNeighbours p (filter (/=p) points))) points
-    print $ calcPath [head points] 0 connections (last points)
+    let risks = map (map (\c -> rInt [c])) $ words contents
+    let (h,w) = (length risks, length $ head risks)
+    let costs = A.listArray ((1,1),(h, w)) (concat risks) A.// [((1,1), 0)]
+    let visited = A.listArray ((1,1),(h, w)) $ True : replicate (w*h-1) False
+    let queue = Q.insert (1,1) 0 Q.empty
+    print $ calcPath queue costs visited (h,w)
 
-type Point = (Int,Int,Int)
-type Connection = (Point, [Point])
+part2 :: IO ()
+part2 = do
+    contents <- readFile "input/day15.txt"
+    let risks = extend 0 $ map (map (\c -> rInt [c])) $ words contents
+    let (h,w) = (length risks, length $ head risks)
+    let costs = A.listArray ((1,1),(h, w)) (concat risks) A.// [((1,1), 0)]
+    let visited = A.listArray ((1,1),(h, w)) $ True : replicate (w*h-1) False
+    let queue = Q.insert (1,1) 0 Q.empty
+    print $ calcPath queue costs visited (h,w)
 
-maxRisk :: Int
-maxRisk = maxBound :: Int
+type Pos = (Int,Int)
+type Cost = A.Array Pos Int
+type Visited = A.Array Pos Bool
+type PrioQueue = Q.PSQ Pos Int
 
+extend :: Int -> [[Int]] -> [[Int]]
+extend 5 xs = []
+extend n xs = map (extendRow 0 . map (+n)) xs ++ extend (n+1) xs
 
-calcPath :: [Point] -> Int -> [Connection] -> Point -> Int
-calcPath path cost connections end =
-    let current = last path
-        neighbours = filter (`notElem` path) (getConnection current connections)
-    in if current == end
-    then
-        cost
-    else
-        if null neighbours
-        then
-            maxRisk
-        else
-            minimum $ map (\p@(_,_,c) -> calcPath (path ++ [p]) (cost + c) connections end) neighbours
+extendRow :: Int -> [Int] -> [Int]
+extendRow 5 _ = []
+extendRow n xs = map (\x -> if x+n > 9 then x+n-9 else x+n) xs ++ extendRow (n+1) xs
 
-getRisk :: [Point] -> Int
-getRisk [] = 0
-getRisk ((_,_,r):ps) = r + getRisk ps
+calcPath :: PrioQueue -> Cost -> Visited -> Pos -> PrioQueue
+calcPath qs cs vs end =
+    let ((c Q.:-> d), qs') = fromJust $ Q.minView qs
+        next = filter (\n -> not $ vs A.! n) $ diggable cs c
+        vs' = vs A.// map (\n -> (n,True)) next
+        dist = map (\n -> (n,cs A.! n)) next
+        qs'' = insertAll qs' dist d
+    in if c == end then qs else calcPath qs'' cs vs' end
 
-getConnection :: Point -> [Connection] -> [Point]
-getConnection p [] = []
-getConnection p (c:cs)
-    | p == fst c = snd c
-    | otherwise = getConnection p cs
+insertAll :: PrioQueue -> [(Pos,Int)] -> Int -> PrioQueue
+insertAll qs [] _ = qs
+insertAll qs ((p,i):ps) d = insertAll (Q.insert p (i+d) qs) ps d
 
-getNeighbours :: Point -> [Point] -> [Point]
-getNeighbours _ [] = []
-getNeighbours p1@(a,b,_) (p2@(x,y,_):ps)
-    | abs (a-x) + abs (a-y) < 2 = p2 : getNeighbours p1 ps
-    | otherwise = getNeighbours p1 ps
+addVisited :: Visited -> [Pos] -> Visited
+addVisited = foldl (\ vs p -> vs A.// [(p, True)])
 
-getPoint :: Int -> Int -> [Point] -> Point
-getPoint r c (p@(a,b,_):xss)
-    | r == a && c == b = p
-    | otherwise = getPoint r c xss
-
-mapToPoints :: Int -> Int -> [[Int]] -> [Point]
-mapToPoints r c xs
-    | r > length xs = []
-    | otherwise = (r,c,risk) : mapToPoints newR newC xs
-        where risk = last $ take c (last $ take r xs)
-              (newR, newC) = if c == length (head xs) then (r+1,1) else (r,c+1)
+diggable :: Cost -> Pos -> [Pos]
+diggable costs (x,y) = filter (A.inRange $ A.bounds costs) [(x+1,y),(x-1,y),(x,y+1),(x,y-1)]
 
 rInt :: String -> Int
 rInt = read

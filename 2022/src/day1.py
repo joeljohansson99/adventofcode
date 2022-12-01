@@ -23,28 +23,15 @@ def main():
 
 def part1(input):
     cals = [sum(i) for i in input]
-    most = 0
+    cals.sort(reverse=True)
 
-    for cal in cals:
-        if cal > most:
-            most = cal
-
-    return most
+    return cals[0]
 
 def part2(input):
     cals = [sum(i) for i in input]
-    total = 0
-    for k in range(0, 3):
-        most = 0
+    cals.sort(reverse=True)
 
-        for cal in cals:
-
-            if cal > most:
-                most = cal
-        total += most
-        cals.remove(most)
-
-    return total
+    return sum(cals[0:3])
 
 if __name__ == "__main__":
     sys.exit(main())

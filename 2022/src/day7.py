@@ -35,9 +35,6 @@ def part2(folders):
     return deleted
 
 def sum(folders, curr):
-    if isinstance(folders[curr], int):
-        return folders
-
     space = 0
     for cont in folders[curr]:
         if cont.isdigit():

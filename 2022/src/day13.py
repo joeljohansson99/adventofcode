@@ -54,8 +54,6 @@ def part2(input):
                 packets[i+1] = tmp
                 sorting = True
 
-
-
     return (packets.index([[2]]) + 1) * (packets.index([[6]]) + 1)
 
 

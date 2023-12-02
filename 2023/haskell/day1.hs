@@ -1,11 +1,13 @@
 import Data.Char
 import Data.Maybe
 
+part1 :: IO ()
 part1 = do 
     contents <- readFile "input/day1.txt"
     let lines = words contents
     print . getSum $ lines
 
+part2 :: IO ()
 part2 = do
     contents <- readFile "input/day1.txt"
     let lines = words contents

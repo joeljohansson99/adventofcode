@@ -134,41 +134,5 @@ def part2(input):
             
     return count
 
-def bfs(input, start, end):
-    visited = set()
-    current = set()
-    current.add(start)
-    visited.add(start)
-    steps = 1
-    while current:
-        next = set()
-        for (r, c) in current:
-            for (dr,dc) in [(r+1,c),(r-1,c),(r,c+1),(r,c-1)]:
-                if 0 <= dr < len(input) and 0 <= dc < len(input[0]) and (dr,dc) not in visited:
-                    if input[dr][dc] == "E":
-                        return steps
-                    if input[dr][dc] == "#":
-                        continue
-                    next.add((dr,dc))
-                    visited.add((dr,dc))
-        steps+=1
-        current = next
-        time.sleep(0.08)
-        print_map(input, visited)
-    return "error"
-
-def print_map(input, visited, ob = (-1,-1)):
-    for r in range(len(input)):
-        for c in range(len(input[0])):
-            if (r,c) in visited:
-                print("o", end="")
-            else:
-                if r == ob[0] and c == ob[1]:
-                    print("X", end="")
-                else:
-                    print(input[r][c], end="")
-        print("")
-    print("\n\n\n\n\n\n\n\n\n")
-
 if __name__ == "__main__":
     sys.exit(main())

@@ -8,7 +8,7 @@ def main():
         for line in f.readlines():
             input.append(line.replace("\n",""))
 
-    # print("Part 1: " + str(part1(input)))
+    print("Part 1: " + str(part1(input)))
     print("Part 2: " + str(part2(input)))
 
 def part1(input):

@@ -54,6 +54,7 @@ def getWire(insts):
             step+=1
             pos = add(pos, dir)
             wire[pos] = step
+        
     return wire
 
 if __name__ == "__main__":

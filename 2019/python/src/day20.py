@@ -1,6 +1,6 @@
 import os
 import sys
-import networkx as nx
+import networkx as nx # type: ignore
 
 def main():
     input = []

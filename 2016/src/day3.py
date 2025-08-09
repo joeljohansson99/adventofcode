@@ -1,6 +1,7 @@
 import os
 import re
 import sys
+import utils.aoc as aoc
 
 def main():
     input = []
@@ -26,9 +27,9 @@ def part2(input):
     count = 0
     for r in range(0, len(input), 3):
         for c in range(3):
-            a = list(map(int,re.findall(r'[+-]?\d+(?:\.\d+)?', input[r])))[c]
-            b = list(map(int,re.findall(r'[+-]?\d+(?:\.\d+)?', input[r+1])))[c]
-            c = list(map(int,re.findall(r'[+-]?\d+(?:\.\d+)?', input[r+2])))[c]
+            a = aoc.ints(input[r])[c]
+            b = aoc.ints(input[r+1])[c]
+            c = aoc.ints(input[r+2])[c]
             (a,b,c) = sorted([a,b,c])
             if a + b > c:
                 count += 1

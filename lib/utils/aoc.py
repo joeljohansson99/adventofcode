@@ -17,3 +17,5 @@ def right(dir):
 def neighbours(r,c):
     return [(r-1,c),(r+1,c),(r,c-1),(r,c+1)]
 
+def diag_neighbours(r,c):
+    return [(r-1,c),(r+1,c),(r,c-1),(r,c+1),(r-1,c-1),(r+1,c+1),(r+1,c-1),(r-1,c+1)]

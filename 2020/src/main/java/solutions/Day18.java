@@ -1,7 +1,8 @@
 package solutions;
 
 import java.text.StringCharacterIterator;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import utils.Input;
 
@@ -24,6 +25,7 @@ public class Day18 implements Day {
 		return String.valueOf(sum);
 	}
 
+	@Override
 	public String part2() {
 		List<String> lines = input.getList();
 		long sum = 0;

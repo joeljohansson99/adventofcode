@@ -32,7 +32,7 @@ def part2(input):
         t = aoc.ints(line)[0]
         if "L" in line:
             for _ in range(t):
-                dial = (dial + 1) % 100
+                dial = (dial - 1) % 100
                 if dial == 0:
                     count += 1
         if "R" in line:
